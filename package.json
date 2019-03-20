@@ -9,7 +9,7 @@
   "author": "ids",
   "license": "MIT",
   "bin": {
-    "testee": "./hello.js"
+    "aver": "./app.js"
   },
   "dependencies": {
     "chalk": "^2.4.2",

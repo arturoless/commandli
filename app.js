@@ -1,3 +1,6 @@
+#!/usr/bin/env node
+
+const [,, ...args] = process.argv
 const chalk = require('chalk')
 const clear = require('clear')
 const figlet = require('figlet')
