@@ -34,7 +34,10 @@ function main(){
         }
         else if(comando === 'generar' && args.length===2){
             componente=args[1]
-            mail(comṕonente)
+            mail(componente)
+        }
+        else if(comando === '-h' && args.length===1){
+            console.log('USA emango generar [nombre] PARA CREAR UN COMPONENTE DE CORREO.')
         }
     }
 }
@@ -51,6 +54,11 @@ function empezar(nombre){
     
 } 
 function mail(componente){
+    inquirer.prompt([
+        
+    ])
+}
+function pythonMail(nombre){
     inquirer.prompt([
         {
             name: 'remitente',
@@ -80,8 +88,8 @@ function mail(componente){
     ]).then(answers =>{
         spinner.start();
         console.log('Creating python file.')
-        shell.exec('mkdir '+componente)
-        var path = componente +'/'+componente+'.py'
+        shell.exec('mkdir '+nombre+'-componente')
+        var path = nombre +'/'+nombre+'.py'
         var stream = fs.createWriteStream(path);
         stream.once('open', function(fd) {
             stream.write('import sys\n')
