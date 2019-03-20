@@ -19,6 +19,7 @@
     "fs-extra": "^7.0.1",
     "inquirer": "^6.2.2",
     "node-cron": "^2.0.3",
+    "nodemailer": "^5.1.1",
     "shelljs": "^0.8.3"
   }
 }

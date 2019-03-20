@@ -6,6 +6,7 @@ const clear = require('clear')
 const figlet = require('figlet')
 const inquirer = require('inquirer')
 const shell = require('shelljs')
+var nodemailer = require('nodemailer')
 var fs = require('fs')
 var cron = require('node-cron')
 var Spinner = require('cli-spinner').Spinner;
@@ -104,4 +105,8 @@ function mail(componente){
         spinner.stop();
         
     })
+}
+
+function emailWithNode() {
+    
 }
