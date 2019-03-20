@@ -8,11 +8,16 @@
   },
   "author": "ids",
   "license": "MIT",
+  "bin": {
+    "testee": "./hello.js"
+  },
   "dependencies": {
     "chalk": "^2.4.2",
     "clear": "^0.1.0",
     "figlet": "^1.2.1",
+    "fs-extra": "^7.0.1",
     "inquirer": "^6.2.2",
+    "node-cron": "^2.0.3",
     "shelljs": "^0.8.3"
   }
 }
