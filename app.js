@@ -41,6 +41,7 @@ function main(){
         }
     }
 }
+
 function empezar(nombre){
     spinner.start();
     console.log('Creando proyecto ' + nombre)
@@ -67,6 +68,10 @@ function mail(componente){
             {
                 name: 'Node',
                 value: '2'
+            },
+            {
+                name: 'Ruby',
+                value: '3'
             }
         ],
         }
@@ -79,6 +84,10 @@ function mail(componente){
             case '2':
                 nodeMail(componente);
                 extencion = '.js'
+                break;
+            case '3':
+                rubyMail(componente);
+                extencion = '.rb'
                 break;
             default:
                 break;
@@ -271,5 +280,44 @@ function execNode(nombre) {
             default:
                 break;
         }
+    })
+}
+
+function rubyMail(nombre){
+    inquirer.prompt([
+        {
+            name: 'remitente',
+            type: 'input',
+            message: 'Ingrese el correo remitente:'
+        },
+        {
+            name: 'password',
+            type: 'password',
+            message: 'Ingrese la constraseña de aplicación:'
+        },
+        {
+            name: 'destinatario',
+            type: 'input',
+            message: 'Ingrese el correo destinatario:'
+        },
+        {
+            name: 'asunto',
+            type: 'input',
+            message: 'Ingrese el asunto:'
+        },
+        {
+            name: 'cuerpo',
+            type: 'input',
+            message: 'Ingrese el cuerpo del correo:'
+        },
+    ]).then(answers => {
+        spinner.start();
+        console.log('Creating ruby file');
+        shell.exec('mkdir '+ nombre + '-componente');
+        var path = nombre+'-componente'+'/'+nombre+'.rb';
+        var stream = fs.createWriteStream(path);
+        stream.once('open', function(fs){
+
+        });
     })
 }
