@@ -6,7 +6,7 @@ const clear = require('clear')
 const figlet = require('figlet')
 const inquirer = require('inquirer')
 const shell = require('shelljs')
-var nodemailer = require('nodemailer')
+// var nodemailer = require('nodemailer')
 var fs = require('fs')
 var cron = require('node-cron')
 var Spinner = require('cli-spinner').Spinner;
@@ -86,6 +86,7 @@ function mail(componente){
                 extencion = '.js'
                 break;
             case '3':
+                console.log(chalk.red('Recuerde que necesita >>gem mail<<'))
                 rubyMail(componente);
                 extencion = '.rb'
                 break;
@@ -317,7 +318,93 @@ function rubyMail(nombre){
         var path = nombre+'-componente'+'/'+nombre+'.rb';
         var stream = fs.createWriteStream(path);
         stream.once('open', function(fs){
-
+            stream.write("require "+"'mail'\n")
+            stream.write('options = {\n')
+            stream.write(":address              => "+"'smtp.gmail.com',\n")
+            stream.write(":port                 => "+"587,\n")
+            stream.write(":user_name            => "+"'"+answers['remitente']+"',\n")
+            stream.write(":password             => "+"'"+answers['password']+"',\n")
+            stream.write(":authentication       => "+"'plain',\n")
+            stream.write(":enable_starttls_auto => true  }\n")
+            stream.write("Mail.defaults do\n")
+            stream.write("  delivery_method :smtp, options\n")
+            stream.write("end\n")
+            stream.write("Mail.deliver do\n")
+            stream.write("  to "+"'"+answers['destinatario']+"'\n")
+            stream.write("  from "+"'"+answers['remitente']+"'\n")
+            stream.write("  subject "+"'"+answers['asunto']+"'\n")
+            stream.write("  body "+"'"+answers['cuerpo']+"'\n")
+            stream.write("end")
         });
+        console.log(chalk.green('Successfully created correo.rb file.'));
+        spinner.stop();
+        execRuby(nombre);
+    });
+}
+
+function execRuby(nombre) {
+    inquirer.prompt([
+        {
+            name: 'ejecutar',
+            message: '¿Desea ejecutarlo ahora?',
+            type: 'list',
+            choices: [
+                {
+                    name: 'Sí',
+                    value: '1'
+                },
+                {
+                    name: 'No',
+                    value: '0'
+                }
+            ]
+        }
+    ]).then(answer => {
+        switch (answer.ejecutar) {
+            case '1':
+                inquirer.prompt([
+                    {
+                        name: 'gemMail',
+                        message: 'Para ejecutar el archivo es necesario instalar '+chalk.red('mail gem')+' ¿Desea instalarla?',
+                        type: 'list',
+                        choices: [
+                            {
+                                name: 'Sí',
+                                value: '1'
+                            },
+                            {
+                                name: 'No',
+                                value: '0'
+                            }
+                        ],
+                        default: 'No'
+                    }
+                ]).then(ans => {
+                    switch (ans.gemMail) {
+                        case '1':
+                            spinner.start();
+                            console.log(chalk.red('Instalando...'));
+                            try {
+                                shell.exec('gem install mail');
+                                console.log(chalk.green('Instalado correntamente'));
+                            } catch (error) {
+                                console.error(chalk.red(error));
+                            }
+                            spinner.stop();
+                            break;
+                        default:
+                            shell.exec('ruby '+nombre+'-componente/'+nombre+'.rb');
+                            break;
+                    }
+                }).finally(shell.exec('ruby '+nombre+'-componente/'+nombre+'.rb'));
+                break;
+            case '0':
+                console.log(chalk.red('Para ejecutar:'));
+                console.log('cd '+nombre+'-component');
+                console.log('ruby '+nombre+'.rb');
+                break;
+            default:
+                break;
+        }
     })
 }
