@@ -6,13 +6,11 @@ const clear = require('clear')
 const figlet = require('figlet')
 const inquirer = require('inquirer')
 const shell = require('shelljs')
-// var nodemailer = require('nodemailer')
 var fs = require('fs')
 var cron = require('node-cron')
 var Spinner = require('cli-spinner').Spinner;
-var spinner = new Spinner('%s');
-spinner.setSpinnerString('|/-\\')
-var extencion = '';
+var spinner = new Spinner('processing.. %s');
+spinner.setSpinnerString("⠋⠙⠹⠸⠼⠴⠦⠧⠇⠏");
 clear()
 
 console.log(
@@ -32,13 +30,38 @@ function main(){
             nombre_proyecto=args[1]
             empezar(nombre_proyecto)
         }
-        else if(comando === 'generar' && args.length===2){
+        else if(comando === 'generar' && args.length ===2){
             componente=args[1]
             mail(componente)
         }
         else if(comando === '-h' && args.length===1){
             console.log('USA emango generar [nombre] PARA CREAR UN COMPONENTE DE CORREO.')
         }
+        else if(comando === 'generar:python' && args.length ===2){
+            componente=args[1]
+            pythonMail(componente)
+        }
+        else if(comando === 'generar:node' && args.length ===2){
+            componente=args[1]
+            nodeMail(componente)
+        }
+        else if(comando === 'generar:ruby' && args.length ===2){
+            componente=args[1]
+            rubyMail(componente)
+        }
+        
+    }else {
+        console.log(chalk.red('Uso:'))
+        console.log('comando [argumentos] [opciones]\n')
+        console.log(chalk.red('Ayuda:'))
+        console.log('-h')
+        console.log(chalk.red('Empezar:'))
+        console.log('empezar    genera un nuevo directorio')
+        console.log(chalk.red('Generar'))
+        console.log('generar        generar un nuevo componente')
+        console.log('generar python genera un componente python')
+        console.log('generar node   genera un componente node')
+        console.log('generar ruby   genera un componente ruby')
     }
 }
 
@@ -79,16 +102,13 @@ function mail(componente){
         switch (answers.opcion) {
             case '1':
                 pythonMail(componente);
-                extencion = '.py'
                 break;
             case '2':
                 nodeMail(componente);
-                extencion = '.js'
                 break;
             case '3':
                 console.log(chalk.red('Recuerde que necesita >>gem mail<<'))
                 rubyMail(componente);
-                extencion = '.rb'
                 break;
             default:
                 break;
@@ -383,10 +403,10 @@ function execRuby(nombre) {
                     switch (ans.gemMail) {
                         case '1':
                             spinner.start();
-                            console.log(chalk.red('Instalando...'));
                             try {
                                 shell.exec('gem install mail');
                                 console.log(chalk.green('Instalado correntamente'));
+                                shell.exec('ruby '+nombre+'-componente/'+nombre+'.rb');
                             } catch (error) {
                                 console.error(chalk.red(error));
                             }
