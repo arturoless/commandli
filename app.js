@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-
+var JSON = require('./package.json')
 const [,, ...args] = process.argv
 const chalk = require('chalk')
 const clear = require('clear')
@@ -49,6 +49,9 @@ function main(){
             componente=args[1]
             rubyMail(componente)
         }
+        else if (comando === '--version') {
+            console.log('Version: '+JSON.version)
+        }
         
     }else {
         console.log(chalk.red('Uso:'))
@@ -57,11 +60,13 @@ function main(){
         console.log('-h')
         console.log(chalk.red('Empezar:'))
         console.log('empezar    genera un nuevo directorio')
-        console.log(chalk.red('Generar'))
+        console.log(chalk.red('Generar:'))
         console.log('generar        generar un nuevo componente')
-        console.log('generar python genera un componente python')
-        console.log('generar node   genera un componente node')
-        console.log('generar ruby   genera un componente ruby')
+        console.log('generar:python genera un componente python')
+        console.log('generar:node   genera un componente node')
+        console.log('generar:ruby   genera un componente ruby')
+        console.log(chalk.red('Version:'))
+        console.log('--version')
     }
 }
 
